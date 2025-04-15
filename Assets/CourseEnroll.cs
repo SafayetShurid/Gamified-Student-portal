@@ -26,6 +26,8 @@ public class CourseEnroll : MonoBehaviour
     // Update is called once per frame
     public void Enroll()
     {             
-      DatabaseManager.instance.EnrollStudentInCourse(teacherID, studentID, course.courseID);        
+      DatabaseManager.instance.EnrollStudentInCourse(teacherID, studentID, course.courseID);
+        enrollButton.interactable = false;
+        enrollButtonText.text = "Enrolled";
     }
 }

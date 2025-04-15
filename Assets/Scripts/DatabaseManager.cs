@@ -1,8 +1,12 @@
 using Mono.Data.Sqlite;
+using NUnit.Framework.Internal;
 using System;
 using System.Data;
+using System.Windows.Forms;
 using System.Xml.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
+using Application = UnityEngine.Application;
 
 public class DatabaseManager : MonoBehaviour 
 {
@@ -175,6 +179,11 @@ public class DatabaseManager : MonoBehaviour
         return currentStudent;
     }
 
+    public Teacher GetCurrentTeacher()
+    {
+        return currentTeacher;
+    }
+
     public bool CheckEnrollmentExists(int studentID, int courseID)
     {
         bool exists = false;
@@ -210,6 +219,13 @@ public class DatabaseManager : MonoBehaviour
     public void SetCurrentTeacher(string email)
     {
         Teacher teacher = GetTeacherByEmail(email);
+
+        PlayerPrefs.SetString(PlayerPrefData.TEACHER_NAME, teacher.TeacherName);
+        PlayerPrefs.SetString(PlayerPrefData.TEACHER_EMAIL, teacher.TeacherEmail);
+        PlayerPrefs.SetString(PlayerPrefData.TEACHER_ASSIGNTEXT, teacher.TeacherAssignmentText);
+      
+
+
         currentTeacher = teacher;
     }
 
@@ -219,7 +235,7 @@ public class DatabaseManager : MonoBehaviour
         {
             connection.Open();
             IDbCommand command = connection.CreateCommand();
-            command.CommandText = "SELECT TeacherID, Name, Email FROM Teachers WHERE Email = @Email";
+            command.CommandText = "SELECT TeacherID, Name, Email, Assignmenttext FROM Teachers WHERE Email = @Email";
 
             // Use parameters to prevent SQL injection
             var emailParam = command.CreateParameter();
@@ -235,6 +251,7 @@ public class DatabaseManager : MonoBehaviour
                 teacher.TeacherID = int.Parse(reader["TeacherID"].ToString());
                 teacher.TeacherName = reader["Name"].ToString();
                 teacher.TeacherEmail = reader["Email"].ToString();
+                teacher.TeacherAssignmentText = reader["Assignmenttext"].ToString();
                 
                 return teacher;
                 //Debug.Log($"Student Found: ID: {studentID}, Name: {studentName}, Email: {studentEmail}, Attendance: {attendance}, AssignmentStatus: {assignmentStatus}, Score: {score}");
@@ -247,6 +264,65 @@ public class DatabaseManager : MonoBehaviour
 
             }
         }
+    }
+
+    public string GetAssignmentPath(int studentID)
+    {
+        ;
+
+        int courseID = -1; // Default value if teacher not found
+
+        using (var connection = GetConnection())
+        {
+            connection.Open();
+            IDbCommand command = connection.CreateCommand();
+            // Parameterized query to get TeacherID by TeacherName
+            command.CommandText = "SELECT CourseID FROM Enrollments WHERE StudentID = @StudentID";
+
+            // Use parameters to prevent SQL injection
+            var teacherNameParam = command.CreateParameter();
+            teacherNameParam.ParameterName = "@StudentID";
+            teacherNameParam.Value = studentID;
+            command.Parameters.Add(teacherNameParam);
+
+            IDataReader reader = command.ExecuteReader();
+
+            // Check if a result was returned
+            if (reader.Read())
+            {
+                courseID = int.Parse(reader["CourseID"].ToString()); // Get TeacherID
+            }
+        }
+
+        using (var connection = GetConnection())
+        {
+            string assignmentPath = "";
+            connection.Open();
+            IDbCommand command = connection.CreateCommand();
+            // Parameterized query to get TeacherID by TeacherName
+            command.CommandText = "SELECT AssignmentPath FROM Courses WHERE CourseID = @CouseID";
+
+            // Use parameters to prevent SQL injection
+            var teacherNameParam = command.CreateParameter();
+            teacherNameParam.ParameterName = "@CouseID";
+            teacherNameParam.Value = courseID;
+            command.Parameters.Add(teacherNameParam);
+
+            IDataReader reader = command.ExecuteReader();
+
+            // Check if a result was returned
+            if (reader.Read())
+            {
+                assignmentPath = reader["AssignmentPath"].ToString(); // Get TeacherID
+            }
+
+            return assignmentPath;
+        }
+
+        //SELECT AssignmentPath FROM Course WHERE CourseID = [YourCourseID];
+
+
+
     }
 
     public void UpdateCourseAssignmentPathByTeacherName(string teacherName, string assignmentPath)
@@ -269,6 +345,30 @@ public class DatabaseManager : MonoBehaviour
             command.Parameters.Add(CourseTeacher);
 
             command.ExecuteNonQuery();
+        }
+    }
+
+    public void UpdateCourseAssignmentTextByTeacherName(string teacherName, string assignmentText)
+    {
+        using (var connection = GetConnection())
+        {
+            connection.Open();
+            IDbCommand command = connection.CreateCommand();
+
+            command.CommandText = "UPDATE Teachers SET Assignmenttext = @Assignmenttext WHERE Name = @Name";
+
+            var Assignmenttext = command.CreateParameter();
+            Assignmenttext.ParameterName = "@Assignmenttext";
+            Assignmenttext.Value = assignmentText;
+            command.Parameters.Add(Assignmenttext);
+
+            var Name = command.CreateParameter();
+            Name.ParameterName = "@Name";
+            Name.Value = teacherName;
+            command.Parameters.Add(Name);
+
+            command.ExecuteNonQuery();
+            PlayerPrefs.SetString(PlayerPrefData.TEACHER_ASSIGNTEXT,assignmentText);
         }
     }
 

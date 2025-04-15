@@ -41,6 +41,8 @@ public class TeacherLogin : MonoBehaviour
             feedbackText.text = "Invalid email or password!";
             feedbackText.color = Color.red;
         }
+
+        PlayerPrefs.SetString("Teachername", email);
     }
 
     // Function to check the email and password from the Students table in the database

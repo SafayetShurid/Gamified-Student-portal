@@ -11,6 +11,8 @@ public class LeaderBoard : MonoBehaviour
     public GameObject studentPrefab; // Prefab for a single student entry (Text for rank, name, and score)
     private string dbName = "URI=file:school.db"; // Database connection string
 
+    private List<GameObject> gameObjects = new List<GameObject>();
+
     // Start is called before the first frame update
     void Start()
     {
@@ -33,6 +35,15 @@ public class LeaderBoard : MonoBehaviour
         {
             Destroy(child.gameObject);
         }
+
+        if (gameObjects != null)
+        {
+            foreach (var v in gameObjects)
+            {
+                Destroy(v.gameObject);
+            }
+        }
+        
 
         List<Student> students = new List<Student>();
 
@@ -67,6 +78,7 @@ public class LeaderBoard : MonoBehaviour
             textComponents[2].text = student.StudentScore.ToString(); // Third text is for the score
 
             rank++;
+            gameObjects.Add(studentEntry);
         }
     }
 }

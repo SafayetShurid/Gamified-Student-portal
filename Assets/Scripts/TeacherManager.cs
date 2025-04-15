@@ -9,12 +9,15 @@ public class TeacherManager : MonoBehaviour
 
     public TMP_Text teacherNameText;
     Teacher currentTeacher;
+    public TMP_InputField teacherAssignmentText;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        currentTeacher = DatabaseManager.instance.currentTeacher;
-        teacherNameText.text = currentTeacher.TeacherName;
+        currentTeacher = DatabaseManager.instance.GetCurrentTeacher();
+        //teacherNameText.text = currentTeacher.TeacherName;
+        teacherNameText.text = PlayerPrefs.GetString(PlayerPrefData.TEACHER_NAME);
+
     }
 
     // Update is called once per frame
@@ -47,6 +50,11 @@ public class TeacherManager : MonoBehaviour
         {
             Debug.Log("No file selected.");
         }
+    }
+
+    public void UploadAssignmentText()
+    {
+        DatabaseManager.instance.UpdateCourseAssignmentTextByTeacherName(PlayerPrefs.GetString(PlayerPrefData.TEACHER_NAME),teacherAssignmentText.text);
     }
 
 

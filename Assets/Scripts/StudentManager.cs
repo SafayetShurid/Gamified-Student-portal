@@ -10,11 +10,14 @@ public class StudentManager : MonoBehaviour
 {
     public TMP_Text studentNameText;
     public TMP_Text scoreText;
+    public TMP_Text assignmenText;
 
 
     void Start()
     {
         studentNameText.text = DatabaseManager.instance.GetCurrentStudent().StudentName;
+        scoreText.text = DatabaseManager.instance.GetCurrentStudent().StudentScore.ToString();
+        assignmenText.text = PlayerPrefs.GetString(PlayerPrefData.TEACHER_ASSIGNTEXT);
     }
 
     private string savedFilePath;
@@ -51,7 +54,7 @@ public class StudentManager : MonoBehaviour
         try
         {
             // Open the file using the default program associated with the file type
-            Process.Start(DatabaseManager.instance.GetCourseAssignmentPath());
+            Process.Start(DatabaseManager.instance.GetAssignmentPath(DatabaseManager.instance.currentStudent.StuentID));
         }
         catch (System.Exception e)
         {

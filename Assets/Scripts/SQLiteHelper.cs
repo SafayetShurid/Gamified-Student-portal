@@ -24,6 +24,23 @@ public class SQLiteHelper : MonoBehaviour
 
     private string dbName;
 
+    public void ClearFields()
+    {
+        courseNameInput.text = "";
+        courseDescInput.text = "";
+
+        courseStudent.text = "";
+        teacherNameInput.text = "";
+
+        teacherEmailInput.text = "";
+        teacherPasswordInput.text = "";
+
+        studentNameInput.text = "";
+        studentEmailInput.text = "";
+
+        studentPasswordInput.text = "";
+    }
+
     // Method to open a database connection
     private IDbConnection GetConnection()
     {
@@ -76,7 +93,8 @@ public class SQLiteHelper : MonoBehaviour
                     TeacherID INTEGER PRIMARY KEY AUTOINCREMENT,
                     Name TEXT,
                     Email TEXT,
-                    Password TEXT
+                    Password TEXT,
+                    Assignmenttext TEXT
                 );
 
                 CREATE TABLE IF NOT EXISTS Students (
@@ -114,7 +132,11 @@ public class SQLiteHelper : MonoBehaviour
             command.CommandText = $"INSERT INTO Teachers (Name, Email, Password) VALUES ('{name}', '{email}', '{password}')";
             command.ExecuteNonQuery();
         }
+
+        ClearFields();
     }
+
+    
 
     // Method to add a new student
     public void AddStudent(string name, string email, string password, int attendance, int assignmentStatus, int score)
@@ -126,12 +148,15 @@ public class SQLiteHelper : MonoBehaviour
             command.CommandText = $"INSERT INTO Students (Name, Email, Password, Attendance, AssignmentStatus, Score) VALUES ('{name}', '{email}', '{password}', {attendance}, {assignmentStatus}, {score})";
             command.ExecuteNonQuery();
         }
+
+        ClearFields();
     }
 
     public void AddCourse()
     {
         AddCourse(courseNameInput.text, courseDescInput.text,courseTeacher.text, int.Parse(courseStudent.text),"");
         Toast.Show("Course Added succesfully");
+        
     }
 
     public void AddTeacher()
@@ -155,6 +180,8 @@ public class SQLiteHelper : MonoBehaviour
             command.CommandText = $"INSERT INTO Courses (CourseName, CourseDescription,CourseTeacher,NumberOfStudents,AssignmentPath) VALUES ('{courseName}', '{courseDescription}' , '{courseTeacher}' , '{noOfStudents}','{assignmentPath}')";
             command.ExecuteNonQuery();
         }
+
+        ClearFields();
 
        // sQLiteHelper.EnrollTeacherInCourse(teacherID, course.courseID);
     }
