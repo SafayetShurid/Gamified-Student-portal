@@ -19,6 +19,9 @@ public class SQLiteHelper : MonoBehaviour
     public GameObject coursePrefab;
     public Transform coursePanel;
 
+    private List<GameObject> gameObjects = new List<GameObject>();
+    private List<Course> courses = new List<Course>();
+
     private string dbName;
 
     // Method to open a database connection
@@ -225,7 +228,15 @@ public class SQLiteHelper : MonoBehaviour
 
     public void ShowCourses()
     {
-        List<Course> courses = GetCourses();
+        foreach(var v in gameObjects)
+        {
+            Destroy(v);
+        }
+
+        
+        courses.Clear();
+
+        courses = GetCourses();
 
         foreach(var v in courses)
         {
@@ -238,6 +249,8 @@ public class SQLiteHelper : MonoBehaviour
             c.coursenameText.text = v.courseName;
             c.courseTeacher = v.courseTeacher;
             c.noOfStudents = v.noOfStudents;
+
+            gameObjects.Add(gO);
         }
 
        

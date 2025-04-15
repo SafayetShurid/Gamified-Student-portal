@@ -8,36 +8,6 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/AdminPanel.unity
     guid: d87633c19ba269b429a4298e1e6f85eb
-  - enabled: 1
-    path: Assets/Scenes/AdminLogin.unity
-    guid: 8c9cfa26abfee488c85f1582747f6a02
-  - enabled: 1
-    path: Assets/Scenes/StudentLogin.unity
-    guid: b2c43f929421aa344a97ea4110436f15
-  - enabled: 1
-    path: Assets/Scenes/Course.unity
-    guid: 98bcca5e8e52ea84f92e571e1f48960c
-  - enabled: 1
-    path: Assets/Scenes/Database.unity
-    guid: 53286b5e2639abe4abbae58e297f9759
-  - enabled: 1
-    path: Assets/Scenes/MathCourse.unity
-    guid: 31c6d3c374acd4a4b89e2f781547dec8
-  - enabled: 1
-    path: Assets/Scenes/TeacherLogin.unity
-    guid: 232b3ac7f5c0f184c8ee1fd697a2c801
-  - enabled: 1
-    path: Assets/Scenes/TeacherPanel.unity
-    guid: e1bd697290e5032429afe2b06713eca0
-  - enabled: 1
-    path: Assets/Scenes/StudentPanel.unity
-    guid: 4f86e2c5fbadd7d4bb096e590dbf3fd1
-  - enabled: 1
-    path: Assets/Scenes/StudentProfile.unity
-    guid: 21d0e7d0950471245a1242860f30054e
-  - enabled: 1
-    path: Assets/Scenes/FileManagerScene.unity
-    guid: 629618608ae84f249ae6ef0205fcc5bb
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   m_UseUCBPForAssetBundles: 0
