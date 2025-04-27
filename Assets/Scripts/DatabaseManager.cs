@@ -27,6 +27,7 @@ public class DatabaseManager : MonoBehaviour
         }
 
         DontDestroyOnLoad(gameObject);
+        PlayerPrefs.DeleteAll();
     }
 
     private IDbConnection GetConnection()
